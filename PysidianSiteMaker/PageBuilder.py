@@ -1,12 +1,13 @@
 import markdown
 
 
-def BuildPage(source, target):
-    print ("source: " + source)
-    print("target: " + target)
-
-    contents = open(source).read()
-    htmlContents = markdown.markdown(contents)
+def BuildPage(headerFile, bodySourceFile, footerFile, target):
+    header = open(headerFile).read()
+    bodySource = open(bodySourceFile).read()
+    body = markdown.markdown(bodySource)
+    footer = open(footerFile).read()
 
     with open(target, 'w') as f:
-        f.write(htmlContents)
+        f.write(header)
+        f.write(body)
+        f.write(footer)

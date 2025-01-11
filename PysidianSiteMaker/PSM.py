@@ -18,9 +18,19 @@ def main():
         shutil.rmtree(targetDir)
     os.makedirs(targetDir)
 
-    source = sourceDir + "/index.md"
+    # Build single test page from the targetDir argument
+    headerFile = sourceDir + "/header.html"
+    bodySourceFile = sourceDir + "/index.md"
+    footerFile = sourceDir + "/footer.html"
     target = targetDir + "/index.html"
-    PageBuilder.BuildPage(source, target)
+    PageBuilder.BuildPage(headerFile, bodySourceFile, footerFile, target)
+
+    # Copy over manually built files
+    toCopy = ["/style.css"]
+    for i in range(len(toCopy)):
+        sourceFile = sourceDir + toCopy[i]
+        targetDir = targetDir + toCopy[i]
+        shutil.copy2(sourceFile, targetDir)
 
 
 if __name__ == '__main__':
