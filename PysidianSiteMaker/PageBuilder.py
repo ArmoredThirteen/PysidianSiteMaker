@@ -1,6 +1,10 @@
 import markdown
 
 
+def GetBody(bodySourceFile):
+	return open(bodySourceFile).read()
+
+
 def BuildPage(headerFile, bodySourceFile, footerFile, target):
 	header = open(headerFile).read()
 	bodySource = open(bodySourceFile).read()
