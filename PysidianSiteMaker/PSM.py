@@ -9,6 +9,9 @@ import PageBuilder
 # Get arguments
 vaultDir = sys.argv[1]
 
+# Files that were built manually and need copied directly
+copyDirect = ["style.css"]
+
 
 def main():
 	dirMap = DirectoryMap.DirectoryMap(vaultDir)
@@ -16,8 +19,7 @@ def main():
 	sourceDir = vaultDir
 	targetDir = vaultDir + "_build"
 	
-	headerFile = sourceDir + "/header.html"
-	footerFile = sourceDir + "/footer.html"
+	basePagePath = os.path.join(sourceDir, "basePage.html")
 	
 	# Clean build directory
 	if os.path.isdir(targetDir):
@@ -26,31 +28,20 @@ def main():
 	# Make target root directory
 	os.makedirs(targetDir)
 	
-	# Copy over manually built files
-	toCopy = ["/style.css"]
-	for i in range(len(toCopy)):
-		sourceFile = sourceDir + toCopy[i]
-		targetFile = targetDir + toCopy[i]
-		shutil.copy2(sourceFile, targetFile)
+	# Copy manually built files
+	for i in range(len(copyDirect)):
+		copyFrom = os.path.join(sourceDir, copyDirect[i])
+		copyTo = os.path.join(targetDir, copyDirect[i])
+		shutil.copy2(copyFrom, copyTo)
 	
-	# Build and write all found files
+	# Build and write all relevant files
 	for file in dirMap.map:
+		# Only worried about md files for now
 		if not IsMDFile(file):
 			continue
 		
-		# Make target directory
-		os.makedirs(os.path.join(targetDir, dirMap.GetFileDir(file)), exist_ok=True)
-		
-		# Gather path info for source and target files
-		localFilePath = dirMap.GetFilePath(file)
-		sourcePath = os.path.join(sourceDir, localFilePath)
-		targetPath = os.path.join(targetDir, localFilePath)[:-3] + ".html"
-		
-		#sys.stdout.write("Source: " + sourcePath + "\n")
-		#sys.stdout.write("Target: " + targetPath + "\n")
-		
-		# Build the html page
-		PageBuilder.BuildPage(headerFile, sourcePath, footerFile, targetPath)
+		#basePagePath, dirMap, file, sourceDir, targetDir, styleFileName
+		PageBuilder.BuildPage(basePagePath, dirMap, file, sourceDir, targetDir, "style.css")
 
 
 def IsMDFile(filename):
