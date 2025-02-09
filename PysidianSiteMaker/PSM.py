@@ -7,17 +7,15 @@ import PageBuilder
 
 
 # Get arguments
-vaultDir = sys.argv[1]
+sourceDir = sys.argv[1]
+targetDir = sys.argv[2]
 
 # Files that were built manually and need copied directly
 copyDirect = ["style.css"]
 
 
 def main():
-	dirMap = DirectoryMap.DirectoryMap(vaultDir)
-	
-	sourceDir = vaultDir
-	targetDir = vaultDir + "_build"
+	dirMap = DirectoryMap.DirectoryMap(sourceDir)
 	
 	basePagePath = os.path.join(sourceDir, "basePage.html")
 	

@@ -46,3 +46,10 @@ class DirectoryMap:
 	
 	def GetFilePath(self, fileName):
 		return os.path.join(self.map[fileName], fileName)
+	
+	
+	def GetFileAsLink(self, fileName):
+		# Convert "[[FileName.md]]" into "[FileName](Subfolder/FileName.html)"
+		filePath = self.GetFilePath(fileName)
+		return "[" + fileName[:-3] + "](" + filePath[:-3] + ".html)"
+	

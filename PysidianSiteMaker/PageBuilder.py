@@ -1,14 +1,29 @@
 import os
+import re
 
 import markdown
 
 
-def GetPageText(basePagePath, bodySourcePath, styleLocation):
+def GetPageText(basePagePath, dirMap, bodySourcePath, styleLocation):
 	basePage = open(basePagePath).read()
-	bodySource = open(bodySourcePath).read()
-	body = markdown.markdown(bodySource)
+	bodyText = open(bodySourcePath).read()
 	
-	page = basePage.format(bodyContents = body, styleLocation = styleLocation)
+	# Find and replace Obsidian's double bracket links to be links to html pages
+	pattern = "\[+.*?]]"
+	links = list(set(re.findall(pattern, bodyText)))
+	for link in links:
+		linkName = link[2:-2] + ".md"
+		if not dirMap.HasFile(linkName):
+			continue
+		
+		markdownLink = dirMap.GetFileAsLink(linkName)
+		bodyText = bodyText.replace(link, markdownLink)
+	
+	# Convert body from markdown to html
+	bodyText = markdown.markdown(bodyText)
+	
+	# Format replace body content and the css style location
+	page = basePage.format(bodyContents = bodyText, styleLocation = styleLocation)
 	return page
 
 
@@ -30,7 +45,9 @@ def BuildPage(basePagePath, dirMap, file, sourceDir, targetDir, styleFileName):
 	# Make target directory
 	os.makedirs(os.path.join(targetDir, localDir), exist_ok=True)
 	
-	# Build the html page
-	pageText = GetPageText(basePagePath, sourcePath, styleLocation)
+	# Build page text
+	pageText = GetPageText(basePagePath, dirMap, sourcePath, styleLocation)
+	
+	# Write to target file
 	with open(targetPath, 'w') as f:
 		f.write(pageText)
