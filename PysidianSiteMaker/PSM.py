@@ -2,35 +2,45 @@ import os
 import sys
 import shutil
 
+import json
+
 import DirectoryMap
 import PageBuilder
 
 
 # Get arguments
-sourceDir = sys.argv[1]
-targetDir = sys.argv[2]
+configsDir = sys.argv[1]
+vaultDir = sys.argv[2]
+buildDir = sys.argv[3]
 
 # Files that were built manually and need copied directly
 copyDirect = ["style.css"]
 
 
 def main():
-	dirMap = DirectoryMap.DirectoryMap(sourceDir)
+	configFile = os.path.join(configsDir, "psmconfig.json")
+	configs = json.loads(open(configFile).read())
 	
-	basePagePath = os.path.join(sourceDir, "basePage.html")
+	dirMap = DirectoryMap.DirectoryMap(vaultDir)
+	basePagePath = os.path.join(configsDir, configs["basePage"])
 	
 	# Clean build directory
-	if os.path.isdir(targetDir):
-		shutil.rmtree(targetDir)
+	if os.path.isdir(buildDir):
+		shutil.rmtree(buildDir)
 	
 	# Make target root directory
-	os.makedirs(targetDir)
+	os.makedirs(buildDir)
 	
-	# Copy manually built files
-	for i in range(len(copyDirect)):
-		copyFrom = os.path.join(sourceDir, copyDirect[i])
-		copyTo = os.path.join(targetDir, copyDirect[i])
-		shutil.copy2(copyFrom, copyTo)
+	# Copy styles directory
+	#styleFrom = os.path.abspath(os.path.join(configsDir, configs["styles"]["default"]))
+	#styleTo = os.path.join(buildDir, "style.css")
+	#shutil.copy2(styleFrom, styleTo)
+	stylesDirFrom = os.path.join(configsDir, configs["stylesDir"])
+	stylesDirTo = os.path.join(buildDir, configs["stylesDir"])
+	shutil.copytree(stylesDirFrom, stylesDirTo)
+	
+	defaultStyle = os.sep + os.path.normpath(configs["styles"]["default"])
+	print(defaultStyle)
 	
 	# Build and write all relevant files
 	for file in dirMap.map:
@@ -39,7 +49,7 @@ def main():
 			continue
 		
 		#basePagePath, dirMap, file, sourceDir, targetDir, styleFileName
-		PageBuilder.BuildPage(basePagePath, dirMap, file, sourceDir, targetDir, "style.css")
+		PageBuilder.BuildPage(basePagePath, dirMap, file, vaultDir, buildDir, defaultStyle)
 
 
 def IsMDFile(filename):

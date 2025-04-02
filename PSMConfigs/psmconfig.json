@@ -1,0 +1,7 @@
+{
+	"basePage": "basePage.html",
+	"stylesDir": "styles",
+	"styles": {
+		"default": "styles/default.css"
+	}
+}

@@ -4,12 +4,9 @@ import re
 import markdown
 
 
-def GetPageText(basePagePath, dirMap, bodySourcePath, folderDepth, styleFileName):
+def GetPageText(basePagePath, dirMap, bodySourcePath, styleFileName):
 	basePage = open(basePagePath).read()
 	bodyText = open(bodySourcePath).read()
-	
-	relativeLocation = ((".." + os.sep) * folderDepth)
-	styleLocation = relativeLocation + styleFileName
 	
 	# Find and replace Obsidian's double bracket links to be links to html pages
 	pattern = "\[+.*?]]"
@@ -19,37 +16,33 @@ def GetPageText(basePagePath, dirMap, bodySourcePath, folderDepth, styleFileName
 		if not dirMap.HasFile(linkName):
 			continue
 		
-		markdownLink = dirMap.GetFileAsLink(linkName, relativeLocation)
+		markdownLink = dirMap.GetFileAsLink(linkName)
 		bodyText = bodyText.replace(link, markdownLink)
 	
 	# Convert body from markdown to html
 	bodyText = markdown.markdown(bodyText)
 	
 	# Format replace body content and the css style location
-	page = basePage.format(bodyContents = bodyText, styleLocation = styleLocation)
+	page = basePage.format(bodyContents = bodyText, styleLocation = styleFileName)
 	return page
 
 
-def BuildPage(basePagePath, dirMap, file, sourceDir, targetDir, styleFileName):
+def BuildPage(basePagePath, dirMap, file, vaultDir, buildDir, styleFileName):
 	localDir = dirMap.GetFileDir(file)
 	
 	# Source values
 	localSourcePath = dirMap.GetFilePath(file)
-	sourcePath = os.path.join(sourceDir, localSourcePath)
+	sourcePath = os.path.join(vaultDir, localSourcePath)
 	
 	# Target values
 	localTargetPath = localSourcePath[:-3] + ".html"
-	targetPath = os.path.join(targetDir, localTargetPath)
-	
-	# Style file location
-	folderDepth = localSourcePath.count(os.sep)
-	#styleLocation = ((".." + os.sep) * folderDepth) + styleFileName
+	targetPath = os.path.join(buildDir, localTargetPath)
 	
 	# Make target directory
-	os.makedirs(os.path.join(targetDir, localDir), exist_ok=True)
+	os.makedirs(os.path.join(buildDir, localDir), exist_ok=True)
 	
 	# Build page text
-	pageText = GetPageText(basePagePath, dirMap, sourcePath, folderDepth, styleFileName)
+	pageText = GetPageText(basePagePath, dirMap, sourcePath, styleFileName)
 	
 	# Write to target file
 	with open(targetPath, 'w') as f:
