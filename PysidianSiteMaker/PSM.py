@@ -6,6 +6,7 @@ import json
 
 import DirectoryMap
 import PageBuilder
+import SiteData
 
 
 # Get arguments
@@ -21,7 +22,7 @@ def main():
 	configFile = os.path.join(configsDir, "psmconfig.json")
 	configs = json.loads(open(configFile).read())
 	
-	dirMap = DirectoryMap.DirectoryMap(vaultDir)
+	siteData = SiteData.SiteData(vaultDir)
 	basePagePath = os.path.join(configsDir, configs["basePage"])
 	
 	# Clean build directory
@@ -43,13 +44,13 @@ def main():
 	print(defaultStyle)
 	
 	# Build and write all relevant files
-	for file in dirMap.map:
+	for file in siteData.dirMap.map:
 		# Only worried about md files for now
 		if not IsMDFile(file):
 			continue
 		
 		#basePagePath, dirMap, file, sourceDir, targetDir, styleFileName
-		PageBuilder.BuildPage(basePagePath, dirMap, file, vaultDir, buildDir, defaultStyle)
+		PageBuilder.BuildPage(basePagePath, siteData, file, vaultDir, buildDir, defaultStyle)
 
 
 def IsMDFile(filename):

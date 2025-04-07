@@ -4,7 +4,7 @@ import re
 import markdown
 
 
-def GetPageText(basePagePath, dirMap, bodySourcePath, styleFileName):
+def GetPageText(basePagePath, siteData, bodySourcePath, styleFileName):
 	basePage = open(basePagePath).read()
 	bodyText = open(bodySourcePath).read()
 	
@@ -13,11 +13,19 @@ def GetPageText(basePagePath, dirMap, bodySourcePath, styleFileName):
 	links = list(set(re.findall(pattern, bodyText)))
 	for link in links:
 		linkName = link[2:-2] + ".md"
-		if not dirMap.HasFile(linkName):
+		if not siteData.dirMap.HasFile(linkName):
 			continue
 		
-		markdownLink = dirMap.GetFileAsLink(linkName)
+		markdownLink = siteData.dirMap.GetFileAsLink(linkName)
 		bodyText = bodyText.replace(link, markdownLink)
+	
+	# Find and replace tags and record them in the site data
+	pattern = "#[^\s#][^\s#]*"
+	tags = list(set(re.findall(pattern, bodyText)))
+	for tag in tags:
+		siteData.AddTag(tag)
+		markdownLink = siteData.GetTagAsLink(tag)
+		bodyText = bodyText.replace(tag, markdownLink)
 	
 	# Convert body from markdown to html
 	bodyText = markdown.markdown(bodyText)
@@ -27,11 +35,11 @@ def GetPageText(basePagePath, dirMap, bodySourcePath, styleFileName):
 	return page
 
 
-def BuildPage(basePagePath, dirMap, file, vaultDir, buildDir, styleFileName):
-	localDir = dirMap.GetFileDir(file)
+def BuildPage(basePagePath, siteData, file, vaultDir, buildDir, styleFileName):
+	localDir = siteData.dirMap.GetFileDir(file)
 	
 	# Source values
-	localSourcePath = dirMap.GetFilePath(file)
+	localSourcePath = siteData.dirMap.GetFilePath(file)
 	sourcePath = os.path.join(vaultDir, localSourcePath)
 	
 	# Target values
@@ -42,7 +50,7 @@ def BuildPage(basePagePath, dirMap, file, vaultDir, buildDir, styleFileName):
 	os.makedirs(os.path.join(buildDir, localDir), exist_ok=True)
 	
 	# Build page text
-	pageText = GetPageText(basePagePath, dirMap, sourcePath, styleFileName)
+	pageText = GetPageText(basePagePath, siteData, sourcePath, styleFileName)
 	
 	# Write to target file
 	with open(targetPath, 'w') as f:
