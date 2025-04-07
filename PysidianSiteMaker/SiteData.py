@@ -1,5 +1,6 @@
 #TODO Needs a better name, "Data" is famously non-descriptive
 import os
+from collections import defaultdict
 
 import DirectoryMap
 
@@ -7,7 +8,8 @@ import DirectoryMap
 class SiteData:
 	"""Used for storing persistent information about the website. Things like the directory map or list of tags"""
 	
-	tags = []
+	defaultStyleLoc = ""
+	tags = defaultdict(list)
 	dirMap = None
 	
 	
@@ -15,12 +17,11 @@ class SiteData:
 		self.dirMap = DirectoryMap.DirectoryMap(rootDir)
 		
 		
-	def AddTag(self, tagName):
-		if tagName in self.tags:
-			return
-		
-		self.tags.append(tagName)
-		
+	def AddTag(self, tag, targetPagePath):
+		#print("Adding " + str(tag) + " for " + str(targetPagePath))
+		self.tags[tag].append(targetPagePath)
+	
+	
 	def GetTagAsLink(self, tag):
 		tagPath = os.sep + "Tags" + os.sep + tag[1:]
-		return "[" + tag + "](" + tagPath + ")"
+		return "[" + tag + "](" + tagPath + ".html)"
