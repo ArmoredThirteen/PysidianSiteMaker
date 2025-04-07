@@ -24,6 +24,7 @@ def main():
 	
 	siteData = SiteData.SiteData(vaultDir)
 	basePagePath = os.path.join(configsDir, configs["basePage"])
+	tagsPagePath = os.path.join(configsDir, configs["tagsPage"])
 	
 	# Clean build directory
 	if os.path.isdir(buildDir):
@@ -52,7 +53,8 @@ def main():
 	tagsDir = os.path.join(buildDir, "Tags")
 	os.makedirs(tagsDir, exist_ok=True)
 	for tag in siteData.tags:
-		PageBuilder.BuildTagPage(tag, siteData, tagsDir, buildDir)
+		#print(tag)
+		PageBuilder.BuildTagPage(tagsPagePath, siteData, tag, tagsDir, buildDir)
 
 
 def IsMDFile(filename):

@@ -5,7 +5,7 @@ import string
 import markdown
 
 
-def GetPageText(basePagePath, targetPath, siteData, bodySourcePath):
+def GetPageText(basePagePath, targetPath, siteData, bodySourcePath, file):
 	basePage = open(basePagePath).read()
 	bodyText = open(bodySourcePath).read()
 	
@@ -26,8 +26,9 @@ def GetPageText(basePagePath, targetPath, siteData, bodySourcePath):
 	pattern = "#[^\s#][^\s" + string.punctuation + "#]*"
 	tags = list(set(re.findall(pattern, bodyText)))
 	for tag in tags:
-		siteData.AddTag(tag, targetPath)
+		siteData.AddTag(tag, file)
 		markdownLink = siteData.GetTagAsLink(tag)
+		#print(tag + ": " + markdownLink)
 		bodyText = bodyText.replace(tag, markdownLink)
 	
 	# Convert body from markdown to html
@@ -53,7 +54,7 @@ def BuildPage(basePagePath, siteData, file, vaultDir, buildDir):
 	os.makedirs(os.path.join(buildDir, localDir), exist_ok=True)
 	
 	# Build page text
-	pageText = GetPageText(basePagePath, targetPath, siteData, sourcePath)
+	pageText = GetPageText(basePagePath, targetPath, siteData, sourcePath, file)
 	
 	# Write to target file
 	with open(targetPath, 'w') as f:
@@ -61,7 +62,9 @@ def BuildPage(basePagePath, siteData, file, vaultDir, buildDir):
 
 
 #TODO This method, and likely some of the tag logic surrounding it, is totally fucked
-def BuildTagPage(tag, siteData, tagsDir, buildDir):
+def BuildTagPage(tagPagePath, siteData, tag, tagsDir, buildDir):
+	tagPageText = open(tagPagePath).read()
+	
 	tagName = tag[1:]
 	tagPage = tagName + ".html"
 	targetPath = os.path.join(buildDir, tagsDir, tagPage)
@@ -69,11 +72,13 @@ def BuildTagPage(tag, siteData, tagsDir, buildDir):
 	# Page text is a list of pages with the tag
 	bodyText = ""
 	for tagPage in siteData.tags[tag]:
-		bodyText += "[" + tagPage + "](" + str(targetPath) + ")"
+		bodyText += "- " + siteData.dirMap.GetFileAsLink(tagPage) + os.linesep
 	
 	bodyText = markdown.markdown(bodyText)
 	
+	page = tagPageText.format(bodyContents=bodyText, styleLocation=siteData.defaultStyleLoc)
+	
 	# Write to target file
 	with open(targetPath, 'w') as f:
-		f.write(bodyText)
+		f.write(page)
 	
