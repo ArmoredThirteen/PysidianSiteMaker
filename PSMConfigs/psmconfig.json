@@ -1,8 +1,14 @@
 {
-	"basePage": "basePage.html",
-	"tagsPage": "tagsPage.html",
-	"stylesDir": "styles",
-	"styles": {
-		"default": "styles/default.css"
-	}
+	"pageTemplates": {
+		"dir": "PageTemplates",
+		"note": "NotePageTemplate.html",
+		"tag": "TagPageTemplate.html"
+	},
+	
+	"CSS": {
+		"dir": "styles",
+		"default": "default.css"
+	},
+	
+	"TagsLocalDir": "Tags"
 }
