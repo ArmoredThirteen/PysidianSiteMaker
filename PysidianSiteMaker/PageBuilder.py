@@ -32,9 +32,18 @@ def ProcessNotePage(siteBuildData, page):
 		markdownLink = siteBuildData.GetTagAsMarkdownLink(tag)
 		pageText = pageText.replace(tag, markdownLink)
 	
+	# Get the mainHeading title of the page
+	mainHeading = page[:-3]
+	if page == siteBuildData.configs["indexPage"]["baseFile"]:
+		mainHeading = siteBuildData.configs["indexPage"]["mainHeading"]
+	
 	# Convert markdown to html
 	pageText = markdown.markdown(pageText)
-	htmlText = siteBuildData.notePageTemplateText.format(bodyContents=pageText, styleLocation=siteBuildData.defaultStyleLoc)
+	htmlText = siteBuildData.notePageTemplateText.format(
+		styleLocation   = siteBuildData.defaultStyleLoc,
+		faviconLocation = siteBuildData.faviconLoc,
+		mainHeading     = mainHeading,
+		bodyContents    = pageText)
 	
 	# Write to new html file
 	targetFile = os.path.join(siteBuildData.buildAbsDir, siteBuildData.GetPageLocalLoc(page))[:-3] + ".html"
@@ -50,7 +59,11 @@ def BuildTagPage(siteBuildData, tag):
 	
 	# Convert markdown to html
 	pageText = markdown.markdown(pageText)
-	htmlText = siteBuildData.tagPageTemplateText.format(bodyContents=pageText, styleLocation=siteBuildData.defaultStyleLoc)
+	htmlText = siteBuildData.tagPageTemplateText.format(
+		styleLocation   = siteBuildData.defaultStyleLoc,
+		faviconLocation = siteBuildData.faviconLoc,
+		mainHeading     = tag[1:],
+		bodyContents    = pageText)
 	
 	# Write to new html file
 	targetFile = os.path.join(siteBuildData.buildAbsDir, siteBuildData.tagsLocalDir, f"{tag[1:]}.html")

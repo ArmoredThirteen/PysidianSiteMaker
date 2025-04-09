@@ -17,6 +17,7 @@ class SiteBuildData:
 	tagPageTemplateText = ""
 	
 	defaultStyleLoc = ""
+	faviconLoc = ""
 	
 	pages = {} # key:val == pageName:pageLocalDir
 	tags = {} # key:val == tagName:[pageName, ...]
@@ -33,10 +34,15 @@ class SiteBuildData:
 		notePageTemplateFile = os.path.join(templatesAbsDir, templatesConfigs["note"])
 		tagPageTemplateFile = os.path.join(templatesAbsDir, templatesConfigs["tag"])
 		
-		# CSS files
+		# CSS and default style
 		cssConfigs = configs["CSS"]
 		cssLocalDir = cssConfigs["dir"]
 		defaultStyleLoc = os.path.join(cssLocalDir, cssConfigs["default"])
+		
+		# Images and favicon
+		imgConfigs = configs["images"]
+		imgLocalDir = imgConfigs["dir"]
+		faviconLoc = os.path.join(imgLocalDir, imgConfigs["favicon"])
 		
 		self.configsAbsDir = configsAbsDir
 		self.vaultAbsDir = vaultAbsDir
@@ -46,6 +52,7 @@ class SiteBuildData:
 		self.notePageTemplateText = open(notePageTemplateFile).read()
 		self.tagPageTemplateText = open(tagPageTemplateFile).read()
 		self.defaultStyleLoc = os.sep + defaultStyleLoc
+		self.faviconLoc = os.sep + faviconLoc
 	
 	
 	def AddPage(self, pageName, pageLocalDir):
@@ -80,7 +87,7 @@ class SiteBuildData:
 	
 	def __str__(self):
 		return (f"== SiteBuildData:{os.linesep}"
-				f"   - configsAbsDir =   '{self.configsAbsDir}',{os.linesep}"
-				f"   - vaultAbsDir =     '{self.vaultAbsDir}',{os.linesep}"
-				f"   - buildAbsDir =     '{self.buildAbsDir}',{os.linesep}"
+				f"   - configsAbsDir   = '{self.configsAbsDir}',{os.linesep}"
+				f"   - vaultAbsDir     = '{self.vaultAbsDir}',{os.linesep}"
+				f"   - buildAbsDir     = '{self.buildAbsDir}',{os.linesep}"
 				f"   - defaultStyleLoc = '{self.defaultStyleLoc}'")

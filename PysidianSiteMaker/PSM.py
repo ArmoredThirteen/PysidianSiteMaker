@@ -52,11 +52,9 @@ def RemakeBuildDir(siteBuildData):
 		shutil.rmtree(siteBuildData.buildAbsDir)
 	os.makedirs(siteBuildData.buildAbsDir)
 	
-	# Copy CSS folder
-	cssLocalDir = siteBuildData.configs["CSS"]["dir"]
-	cssDirFrom = os.path.join(siteBuildData.configsAbsDir, cssLocalDir)
-	cssDirTo = os.path.join(siteBuildData.buildAbsDir, cssLocalDir)
-	shutil.copytree(cssDirFrom, cssDirTo)
+	# Folders that need fully copied
+	CopyFolder(siteBuildData, siteBuildData.configs["CSS"]["dir"])
+	CopyFolder(siteBuildData, siteBuildData.configs["images"]["dir"])
 	
 	# Make new dir for every page
 	for pageLocalDir in siteBuildData.pages.values():
@@ -66,26 +64,10 @@ def RemakeBuildDir(siteBuildData):
 	os.makedirs(os.path.join(siteBuildData.buildAbsDir, siteBuildData.tagsLocalDir), exist_ok=True)
 
 
-'''
-def main():
-	# Build and write main md files as html
-	for file in siteData.dirMap.map:
-		# Only worried about md files for now
-		if not IsMDFile(file):
-			continue
-		
-		PageBuilder.BuildPage(basePagePath, siteData, file, vaultDir, buildDir)
-	
-	# Add tag pages in
-	tagsDir = os.path.join(buildDir, "Tags")
-	os.makedirs(tagsDir, exist_ok=True)
-	for tag in siteData.tags:
-		#print(tag)
-		PageBuilder.BuildTagPage(tagsPagePath, siteData, tag, tagsDir, buildDir)
-'''
-
-def IsMDFile(filename):
-	return filename[-3:] == ".md"
+def CopyFolder(siteBuildData, localDir):
+	dirFrom = os.path.join(siteBuildData.configsAbsDir, localDir)
+	dirTo = os.path.join(siteBuildData.buildAbsDir, localDir)
+	shutil.copytree(dirFrom, dirTo)
 
 
 if __name__ == '__main__':

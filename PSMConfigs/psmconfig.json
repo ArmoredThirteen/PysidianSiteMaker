@@ -10,5 +10,15 @@
 		"default": "default.css"
 	},
 	
-	"TagsLocalDir": "Tags"
+	"images": {
+		"dir": "images",
+		"favicon": "favicon.ico"
+	},
+	
+	"TagsLocalDir": "Tags",
+	
+	"indexPage": {
+		"baseFile": "index.md",
+		"mainHeading": "Deweavers"
+	}
 }
