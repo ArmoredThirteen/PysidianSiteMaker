@@ -48,6 +48,7 @@ class SiteBuildData:
 		self.configsAbsDir = configsAbsDir
 		self.vaultAbsDir = vaultAbsDir
 		self.buildAbsDir = buildAbsDir
+		self.siteDir = siteDir
 		self.tagsLocalDir = configs["TagsLocalDir"]
 		self.configs = configs
 		self.notePageTemplateText = open(notePageTemplateFile).read()
