@@ -5,7 +5,7 @@
 		"tag": "TagPageTemplate.html"
 	},
 	
-	"CSS": {
+	"css": {
 		"dir": "styles",
 		"default": "default.css"
 	},
@@ -15,7 +15,7 @@
 		"favicon": "favicon.ico"
 	},
 	
-	"TagsLocalDir": "Tags",
+	"tagsLocalDir": "Tags",
 	
 	"indexPage": {
 		"baseFile": "index.md",

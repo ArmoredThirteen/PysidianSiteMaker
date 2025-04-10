@@ -56,7 +56,7 @@ def RemakeBuildDir(siteBuildData):
 	os.makedirs(siteBuildData.buildAbsDir)
 	
 	# Folders that need fully copied
-	CopyFolder(siteBuildData, siteBuildData.configs["CSS"]["dir"])
+	CopyFolder(siteBuildData, siteBuildData.configs["css"]["dir"])
 	CopyFolder(siteBuildData, siteBuildData.configs["images"]["dir"])
 	
 	# Make new dir for every page

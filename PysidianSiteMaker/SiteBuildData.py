@@ -41,7 +41,7 @@ class SiteBuildData:
 		tagPageTemplateFile = os.path.join(templatesAbsDir, templatesConfigs["tag"])
 		
 		# CSS and default style
-		cssConfigs = configs["CSS"]
+		cssConfigs = configs["css"]
 		cssLocalDir = cssConfigs["dir"]
 		defaultStyleLoc = self.WithSiteDir(os.path.join(cssLocalDir, cssConfigs["default"]))
 		
@@ -50,7 +50,7 @@ class SiteBuildData:
 		imgLocalDir = imgConfigs["dir"]
 		faviconLoc = self.WithSiteDir(os.path.join(imgLocalDir, imgConfigs["favicon"]))
 		
-		self.tagsLocalDir = configs["TagsLocalDir"]
+		self.tagsLocalDir = configs["tagsLocalDir"]
 		self.configs = configs
 		self.notePageTemplateText = open(notePageTemplateFile).read()
 		self.tagPageTemplateText = open(tagPageTemplateFile).read()
@@ -86,7 +86,7 @@ class SiteBuildData:
 	
 	def GetTagAsMarkdownLink(self, tagName):
 		linkText = tagName
-		linkLoc = self.WithSiteDir(os.path.join("Tags", tagName[1:] + ".html"))
+		linkLoc = self.WithSiteDir(os.path.join(self.tagsLocalDir, tagName[1:] + ".html"))
 		return f"[{linkText}]({os.sep}{linkLoc})"
 	
 	
