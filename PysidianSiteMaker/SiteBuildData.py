@@ -25,6 +25,11 @@ class SiteBuildData:
 	
 	
 	def __init__(self, configsAbsDir, vaultAbsDir, buildAbsDir, siteDir):
+		self.configsAbsDir = configsAbsDir
+		self.vaultAbsDir = vaultAbsDir
+		self.buildAbsDir = buildAbsDir
+		self.siteDir = siteDir
+		
 		# JSON configuration settings
 		configFile = os.path.join(configsAbsDir, "psmconfig.json")
 		configs = json.loads(open(configFile).read())
@@ -45,10 +50,6 @@ class SiteBuildData:
 		imgLocalDir = imgConfigs["dir"]
 		faviconLoc = self.WithSiteDir(os.path.join(imgLocalDir, imgConfigs["favicon"]))
 		
-		self.configsAbsDir = configsAbsDir
-		self.vaultAbsDir = vaultAbsDir
-		self.buildAbsDir = buildAbsDir
-		self.siteDir = siteDir
 		self.tagsLocalDir = configs["TagsLocalDir"]
 		self.configs = configs
 		self.notePageTemplateText = open(notePageTemplateFile).read()
