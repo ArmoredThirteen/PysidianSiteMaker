@@ -1,5 +1,5 @@
-# ObsidianSiteMaker
-Python tool for turning Obsidian projects into HTML pages
+# PysidianSiteMaker
+Python tool for turning Obsidian projects into HTML pages. It is inspired from https://github.com/obsidian-html/obsidian-html but I needed something more up to date and less advanced for my personal use case.
 
 ## Using PSM.py
 ### python PSM.py <configsDir> <vaultDir> <buildDir> <optional:siteDir>
