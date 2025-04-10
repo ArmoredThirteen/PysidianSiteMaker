@@ -2,7 +2,7 @@
 Python tool for turning Obsidian projects into HTML pages. It is inspired from https://github.com/obsidian-html/obsidian-html but I needed something more up to date and less advanced for my personal use case.
 
 ## Using PSM.py
-### python PSM.py <configsDir> <vaultDir> <buildDir> <optional:siteDir>
+### python PSM.py \<configsDir> \<vaultDir> \<buildDir> \<optional:siteDir>
 - configsDir: The directory to find psmconfig.json in. See the /PSMConfigs folder for an example.
 - vaultDir: Root directory of the obsidian vault to convert.
 - buildDir: Where to send the resulting built files. If it exists already it will be wiped clean, if it does not exist it will be made automatically.
