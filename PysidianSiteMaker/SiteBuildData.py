@@ -38,16 +38,12 @@ class SiteBuildData:
 		# CSS and default style
 		cssConfigs = configs["CSS"]
 		cssLocalDir = cssConfigs["dir"]
-		defaultStyleLoc = os.path.join(cssLocalDir, cssConfigs["default"])
+		defaultStyleLoc = self.WithSiteDir(os.path.join(cssLocalDir, cssConfigs["default"]))
 		
 		# Images and favicon
 		imgConfigs = configs["images"]
 		imgLocalDir = imgConfigs["dir"]
-		faviconLoc = os.path.join(imgLocalDir, imgConfigs["favicon"])
-		
-		if siteDir != "":
-			defaultStyleLoc = os.path.join(siteDir, defaultStyleLoc)
-			faviconLoc = os.path.join(siteDir, faviconLoc)
+		faviconLoc = self.WithSiteDir(os.path.join(imgLocalDir, imgConfigs["favicon"]))
 		
 		self.configsAbsDir = configsAbsDir
 		self.vaultAbsDir = vaultAbsDir
@@ -76,18 +72,33 @@ class SiteBuildData:
 	
 	def GetPageAsMarkdownLink(self, pageName):
 		filePath = self.GetPageLocalLoc(pageName)
-		return f"[{pageName[:-3]}]({os.sep}{filePath[:-3]}.html)"
+		
+		linkText = pageName[:-3]
+		linkLoc = self.WithSiteDir(filePath[:-3] + ".html")
+		
+		return f"[{linkText}]({os.sep}{linkLoc})"
 	
 	
 	def GetTagPages(self, tagName):
 		return self.tags[tagName]
 	
 	def GetTagAsMarkdownLink(self, tagName):
-		return f"[{tagName}]({os.sep}Tags{os.sep}{tagName[1:]}.html)"
+		linkText = tagName
+		linkLoc = self.WithSiteDir(os.path.join("Tags", tagName[1:] + ".html"))
+		return f"[{linkText}]({os.sep}{linkLoc})"
 	
 	
 	def HasPage(self, page):
 		return page in self.pages
+	
+	def HasSiteDir(self):
+		return self.siteDir != ""
+	
+	
+	def WithSiteDir(self, path):
+		if self.HasSiteDir():
+			return os.path.join(self.siteDir, path)
+		return path
 	
 	
 	def __str__(self):
