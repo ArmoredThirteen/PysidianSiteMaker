@@ -11,9 +11,12 @@ def main():
 	configsAbsDir = sys.argv[1]
 	vaultAbsDir = sys.argv[2]
 	buildAbsDir = sys.argv[3]
+	siteDir = ""
+	if len(sys.argv) > 4:
+		siteDir = sys.argv[4]
 	
 	# The build data to be passed to various systems
-	siteBuildData = SiteBuildData(configsAbsDir, vaultAbsDir, buildAbsDir)
+	siteBuildData = SiteBuildData(configsAbsDir, vaultAbsDir, buildAbsDir, siteDir)
 	ScanVault(siteBuildData, vaultAbsDir, '')
 	
 	RemakeBuildDir(siteBuildData)

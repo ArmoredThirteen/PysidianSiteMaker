@@ -8,6 +8,7 @@ class SiteBuildData:
 	configsAbsDir = ""
 	vaultAbsDir = ""
 	buildAbsDir = ""
+	siteDir = ""
 	
 	tagsLocalDir = ""
 	
@@ -23,7 +24,7 @@ class SiteBuildData:
 	tags = {} # key:val == tagName:[pageName, ...]
 	
 	
-	def __init__(self, configsAbsDir, vaultAbsDir, buildAbsDir):
+	def __init__(self, configsAbsDir, vaultAbsDir, buildAbsDir, siteDir):
 		# JSON configuration settings
 		configFile = os.path.join(configsAbsDir, "psmconfig.json")
 		configs = json.loads(open(configFile).read())
@@ -43,6 +44,10 @@ class SiteBuildData:
 		imgConfigs = configs["images"]
 		imgLocalDir = imgConfigs["dir"]
 		faviconLoc = os.path.join(imgLocalDir, imgConfigs["favicon"])
+		
+		if siteDir != "":
+			defaultStyleLoc = os.path.join(siteDir, defaultStyleLoc)
+			faviconLoc = os.path.join(siteDir, faviconLoc)
 		
 		self.configsAbsDir = configsAbsDir
 		self.vaultAbsDir = vaultAbsDir
