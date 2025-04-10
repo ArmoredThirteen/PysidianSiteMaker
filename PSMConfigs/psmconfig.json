@@ -20,5 +20,7 @@
 	"indexPage": {
 		"baseFile": "index.md",
 		"mainHeading": "Deweavers"
-	}
+	},
+	
+	"headTitle": "Deweavers"
 }

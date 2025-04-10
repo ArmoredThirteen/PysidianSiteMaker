@@ -40,6 +40,7 @@ def ProcessNotePage(siteBuildData, page):
 	# Convert markdown to html
 	pageText = markdown.markdown(pageText)
 	htmlText = siteBuildData.notePageTemplateText.format(
+		headTitle       = siteBuildData.configs["headTitle"],
 		styleLocation   = siteBuildData.defaultStyleLoc,
 		faviconLocation = siteBuildData.faviconLoc,
 		mainHeading     = mainHeading,
@@ -60,6 +61,7 @@ def BuildTagPage(siteBuildData, tag):
 	# Convert markdown to html
 	pageText = markdown.markdown(pageText)
 	htmlText = siteBuildData.tagPageTemplateText.format(
+		headTitle       = siteBuildData.configs["headTitle"],
 		styleLocation   = siteBuildData.defaultStyleLoc,
 		faviconLocation = siteBuildData.faviconLoc,
 		mainHeading     = tag[1:],
